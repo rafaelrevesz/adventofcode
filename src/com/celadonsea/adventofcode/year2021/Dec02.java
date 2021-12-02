@@ -42,8 +42,8 @@ public class Dec02 {
 
             Map<String, BiConsumer<Coord, Long>> pilot = new HashMap<>();
             pilot.put("forward", (c, x) -> {c.x += x; c.y += (c.aim * x);});
-            pilot.put("up", (c, y) -> {c.aim -= y;});
-            pilot.put("down", (c, y) -> {c.aim += y;});
+            pilot.put("up", (c, y) -> c.aim -= y);
+            pilot.put("down", (c, y) -> c.aim += y);
 
             Coord coordinate = new Coord();
 
