@@ -19,8 +19,8 @@ public class Dec01 {
             String line;
             Integer previousNumber = null;
             int increaseCount = 0;
-            while ((line = br.readLine()) != null) {
-                int currentNumber = Integer.parseInt(line);
+                while ((line = br.readLine()) != null) {
+                    int currentNumber = Integer.parseInt(line);
                 if (previousNumber == null) {
                     System.out.println(currentNumber + " (N/A - no previous measurement)");
                 } else if (currentNumber < previousNumber) {
