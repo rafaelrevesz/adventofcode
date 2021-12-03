@@ -1,4 +1,4 @@
-package com.celadonsea.adventofcode.year2021;
+package com.celadonsea.adventofcode.year2021.dec01;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,7 +15,7 @@ public class Dec01 {
 
     private static void sonar() throws IOException {
         System.out.println("Task 1: sonar");
-        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec01.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec01/dec01.txt"))) {
             String line;
             Integer previousNumber = null;
             int increaseCount = 0;
@@ -39,7 +39,7 @@ public class Dec01 {
 
     private static void windowMeasurements() throws IOException {
         System.out.println("Task 2: measurement windows");
-        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec01.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec01/dec01.txt"))) {
             String line;
             MeasurementWindow w1 = new MeasurementWindow();
             MeasurementWindow w2 = new MeasurementWindow();

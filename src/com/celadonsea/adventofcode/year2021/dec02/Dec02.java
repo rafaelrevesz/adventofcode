@@ -1,4 +1,4 @@
-package com.celadonsea.adventofcode.year2021;
+package com.celadonsea.adventofcode.year2021.dec02;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,7 +15,7 @@ public class Dec02 {
 
     private static void positioning() throws IOException {
         System.out.println("Task 1: positioning");
-        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec02.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec02/dec02.txt"))) {
             String line;
 
             Map<String, BiConsumer<Coord, Long>> pilot = new HashMap<>();
@@ -37,7 +37,7 @@ public class Dec02 {
 
     private static void extraPositioning() throws IOException {
         System.out.println("Task 2: extra positioning");
-        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec02.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec02/dec02.txt"))) {
             String line;
 
             Map<String, BiConsumer<Coord, Long>> pilot = new HashMap<>();
