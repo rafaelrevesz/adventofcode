@@ -15,7 +15,7 @@ public class Dec04 {
 
     public static void main(String[] args) throws IOException {
         String numbers = null;
-        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec04/sample.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec04/dec04.txt"))) {
             String line;
             int boardId = 0;
             int rowId = 0;
@@ -40,11 +40,11 @@ public class Dec04 {
             for (String num : nums) {
                 int number = Integer.parseInt(num);
                 if (boardNumbers.containsKey(number)) {
-                    boardNumbers.get(number).drawNumber();
+                    boardNumbers.get(number).drawNumber(number);
                 }
             }
         } catch (Bingo b) {
-            System.out.println("BINGO!!! Board win: " + b.id);
+            System.out.println("BINGO!!! Board win: " + b.id + ", result: " + b.result);
         }
     }
 
@@ -64,13 +64,14 @@ public class Dec04 {
             BoardReference boardReference = new BoardReference(boards.get(boardId), rowId, colId);
             boardNumbers.get(number).refs.add(boardReference);
             colId++;
+            boards.get(boardId).addNumber(number);
         }
     }
 
     private static class BoardReferences {
         List<BoardReference> refs = new ArrayList<>();
-        void drawNumber() {
-            refs.forEach(BoardReference::drawNum);
+        void drawNumber(int number) {
+            refs.forEach(r -> r.drawNum(number));
         }
     }
 
@@ -83,13 +84,14 @@ public class Dec04 {
             this.rowId = rowId;
             this.colId = colId;
         }
-        void drawNum() {
-            board.newNumber(rowId, colId);
+        void drawNum(int number) {
+            board.newNumber(rowId, colId, number);
         }
     }
 
     private static class Board {
         int id;
+        int sum = 0;
         int[] countOfNumbersDrawnInRow = {0, 0, 0, 0, 0};
         int[] countOfNumbersDrawnInCol = {0, 0, 0, 0, 0};
 
@@ -97,19 +99,26 @@ public class Dec04 {
             this.id = id;
         }
 
-        void newNumber(int row, int col) {
+        void addNumber(int number) {
+            sum += number;
+        }
+
+        void newNumber(int row, int col, int number) {
+            sum -= number;
             countOfNumbersDrawnInCol[col]++;
             countOfNumbersDrawnInRow[row]++;
             if (countOfNumbersDrawnInCol[col] == 5 || countOfNumbersDrawnInRow[row] == 5) {
-                throw new Bingo(id);
+                throw new Bingo(id, sum * number);
             }
         }
     }
 
     private static class Bingo extends RuntimeException {
         int id;
-        Bingo(int id) {
+        int result;
+        Bingo(int id, int result) {
             this.id = id;
+            this.result = result;
         }
     }
 }
