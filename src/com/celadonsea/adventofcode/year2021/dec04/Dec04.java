@@ -12,6 +12,8 @@ public class Dec04 {
 
     private static final Map<Integer, BoardReferences> boardNumbers = new HashMap<>();
     private static final Map<Integer, Board> boards = new HashMap<>();
+    private static int boardCount = 0;
+    private static int bingoCount = 0;
 
     public static void main(String[] args) throws IOException {
         String numbers = null;
@@ -30,22 +32,23 @@ public class Dec04 {
                     rowId++;
                 }
             }
+            boardCount = boardId;
         }
         playBingo(numbers);
     }
 
     private static void playBingo(String numbers) {
         String[] nums = numbers.split(",");
-        try {
-            for (String num : nums) {
-                int number = Integer.parseInt(num);
-                if (boardNumbers.containsKey(number)) {
-                    boardNumbers.get(number).drawNumber(number);
-                }
+        for (String num : nums) {
+            int number = Integer.parseInt(num);
+            if (boardNumbers.containsKey(number)) {
+                boardNumbers.get(number).drawNumber(number);
             }
-        } catch (Bingo b) {
-            System.out.println("BINGO!!! Board win: " + b.id + ", result: " + b.result);
         }
+    }
+
+    private static void shoutBingo(int boardId, int result) {
+        System.out.println("BINGO!!! Board: " + boardId + ", result: " + result);
     }
 
     private static void addNumbersToBoard(String boardRow, int boardId, int rowId) {
@@ -94,6 +97,7 @@ public class Dec04 {
         int sum = 0;
         int[] countOfNumbersDrawnInRow = {0, 0, 0, 0, 0};
         int[] countOfNumbersDrawnInCol = {0, 0, 0, 0, 0};
+        boolean inGame = true;
 
         Board(int id) {
             this.id = id;
@@ -107,18 +111,10 @@ public class Dec04 {
             sum -= number;
             countOfNumbersDrawnInCol[col]++;
             countOfNumbersDrawnInRow[row]++;
-            if (countOfNumbersDrawnInCol[col] == 5 || countOfNumbersDrawnInRow[row] == 5) {
-                throw new Bingo(id, sum * number);
+            if (inGame && (countOfNumbersDrawnInCol[col] == 5 || countOfNumbersDrawnInRow[row] == 5)) {
+                inGame = false;
+                shoutBingo(id, sum * number);
             }
-        }
-    }
-
-    private static class Bingo extends RuntimeException {
-        int id;
-        int result;
-        Bingo(int id, int result) {
-            this.id = id;
-            this.result = result;
         }
     }
 }
