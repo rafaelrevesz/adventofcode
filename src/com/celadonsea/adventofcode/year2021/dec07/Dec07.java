@@ -34,18 +34,18 @@ public class Dec07 {
                 .map(target -> crabsPosition.stream().map(p -> Math.abs(target - p)).reduce(0, Integer::sum))
                 .min(Integer::compareTo)
                 .get();
-        long minFuel = list
+        int minFuel = list
                 .stream()
-                .map(target -> crabsPosition.stream().map(p -> Math.abs(target - p)).map(Dec07::gauss).reduce(0L, Long::sum))
-                .min(Long::compareTo)
+                .map(target -> crabsPosition.stream().map(p -> Math.abs(target - p)).map(Dec07::gauss).reduce(0, Integer::sum))
+                .min(Integer::compareTo)
                 .get();
         System.out.println("Min distance: " + minDistance);
         System.out.println("Min fuel: " + minFuel);
     }
 
-    private static long gauss(long n) {
-        long result = 0;
-        for (long i = 1; i <= n; i++)
+    private static int gauss(int n) {
+        int result = 0;
+        for (int i = 1; i <= n; i++)
             result += i;
         return result;
     }
