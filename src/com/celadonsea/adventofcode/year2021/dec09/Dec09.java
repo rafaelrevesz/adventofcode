@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class Dec09 {
 
-    private static List<LowPoint> lowPoints = new ArrayList<>();
+    private static List<Point> lowPoints = new ArrayList<>();
     private static List<Basin> basins = new ArrayList<>();
     private static List<String> lines = new ArrayList<>();
 
@@ -29,7 +29,7 @@ public class Dec09 {
             String down = i == lines.size() - 1 ? null : lines.get(i + 1);
             result += findLowPoints(up, lines.get(i), down, i);
         }
-        for (LowPoint lowPoint : lowPoints) {
+        for (Point lowPoint : lowPoints) {
             Basin basin = new Basin(lowPoint);
             basins.add(basin);
             mapABasin(lowPoint, basin);
@@ -47,28 +47,28 @@ public class Dec09 {
         // 987840
     }
 
-    private static void mapABasin(LowPoint lowPoint, Basin basin) {
+    private static void mapABasin(Point lowPoint, Basin basin) {
         Integer up = getBasinPoint(lowPoint.x, lowPoint.y - 1);
         Integer down = getBasinPoint(lowPoint.x, lowPoint.y + 1);
         Integer left = getBasinPoint(lowPoint.x - 1, lowPoint.y);
         Integer right = getBasinPoint(lowPoint.x + 1, lowPoint.y);
         if (up != null && up > lowPoint.number && !basin.pointExists(lowPoint.x, lowPoint.y - 1)) {
-            LowPoint point = new LowPoint(lowPoint.x, lowPoint.y - 1, up);
+            Point point = new Point(lowPoint.x, lowPoint.y - 1, up);
             basin.points.add(point);
             mapABasin(point, basin);
         }
         if (down != null && down > lowPoint.number && !basin.pointExists(lowPoint.x, lowPoint.y + 1)) {
-            LowPoint point = new LowPoint(lowPoint.x, lowPoint.y + 1, down);
+            Point point = new Point(lowPoint.x, lowPoint.y + 1, down);
             basin.points.add(point);
             mapABasin(point, basin);
         }
         if (left != null && left > lowPoint.number && !basin.pointExists(lowPoint.x - 1, lowPoint.y)) {
-            LowPoint point = new LowPoint(lowPoint.x - 1, lowPoint.y, left);
+            Point point = new Point(lowPoint.x - 1, lowPoint.y, left);
             basin.points.add(point);
             mapABasin(point, basin);
         }
         if (right != null && right > lowPoint.number && !basin.pointExists(lowPoint.x + 1, lowPoint.y)) {
-            LowPoint point = new LowPoint(lowPoint.x + 1, lowPoint.y, right);
+            Point point = new Point(lowPoint.x + 1, lowPoint.y, right);
             basin.points.add(point);
             mapABasin(point, basin);
         }
@@ -93,7 +93,7 @@ public class Dec09 {
                 if (left && right && up && down) {
                     int lowPointValue = Integer.parseInt("" + test2.charAt(i));
                     result += lowPointValue + 1;
-                    lowPoints.add(new LowPoint(i, row, lowPointValue));
+                    lowPoints.add(new Point(i, row, lowPointValue));
                 }
             }
         }
@@ -101,26 +101,27 @@ public class Dec09 {
     }
 
     private static class Basin {
-        Set<LowPoint> points = new HashSet<>();
+        Set<Point> points = new HashSet<>();
 
-        Basin(LowPoint startingPoint) {
+        Basin(Point startingPoint) {
             points.add(startingPoint);
         }
 
         boolean pointExists(int x, int y) {
             boolean exists = false;
-            for (LowPoint point : points) {
+            for (Point point : points) {
                 exists |= (point.x == x && point.y == y);
             }
             return exists;
         }
     }
 
-    private static class LowPoint {
+    private static class Point {
         int x;
         int y;
         int number;
-        LowPoint(int x, int y, int number) {
+
+        Point(int x, int y, int number) {
             this.x = x;
             this.y = y;
             this.number = number;
@@ -130,7 +131,7 @@ public class Dec09 {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            LowPoint lowPoint = (LowPoint) o;
+            Point lowPoint = (Point) o;
             return x == lowPoint.x && y == lowPoint.y;
         }
     }
