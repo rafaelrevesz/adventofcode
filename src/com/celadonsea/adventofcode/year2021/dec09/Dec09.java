@@ -16,6 +16,7 @@ public class Dec09 {
     private static List<String> lines = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
+        long startTime = System.currentTimeMillis();
         int result = 0;
         try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec09/dec09.txt"))) {
             String line;
@@ -45,6 +46,7 @@ public class Dec09 {
         System.out.println("Basin result: " + basinResult);
         // 600
         // 987840
+        System.out.println("Elapsed time: " + (System.currentTimeMillis() - startTime));
     }
 
     private static void mapABasin(Point lowPoint, Basin basin) {

@@ -13,6 +13,7 @@ public class Dec9Pointers {
     private static final List<Ref> lowPoints = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
+        long startTime = System.currentTimeMillis();
         Ref leftTop = null;
         try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec09/dec09.txt"))) {
             String line;
@@ -55,6 +56,7 @@ public class Dec9Pointers {
         System.out.println("Basins: " + (collect.get(0) * collect.get(1) * collect.get(2)));
         // 600
         // 987840
+        System.out.println("Elapsed time: " + (System.currentTimeMillis() - startTime));
     }
 
     private static class Ref {
