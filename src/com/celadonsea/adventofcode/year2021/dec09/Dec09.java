@@ -3,26 +3,29 @@ package com.celadonsea.adventofcode.year2021.dec09;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Dec09 {
 
     public static void main(String[] args) throws IOException {
+        List<String> lines = new ArrayList<>();
+        int result = 0;
         try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec09/dec09.txt"))) {
             String line;
-            int result = 0;
-            String test1;
-            String test2 = null;
-            String test3 = null;
 
             while ((line = br.readLine()) != null) {
-                test1 = test2;
-                test2 = test3;
-                test3 = line;
-                result += findLowPoints(test1, test2, test3);
+                lines.add(line);
             }
-            result += findLowPoints(test2, test3, null);
-            System.out.println("Result: " + result);
         }
+        for (int i = 0; i < lines.size(); i++) {
+            String up = i == 0 ? null : lines.get(i - 1);
+            String down = i == lines.size() - 1 ? null : lines.get(i + 1);
+            result += findLowPoints(up, lines.get(i), down);
+        }
+        System.out.println("Result: " + result);
+        // 15
+        // 600
     }
 
     private static int findLowPoints(String test1, String test2, String test3) {
