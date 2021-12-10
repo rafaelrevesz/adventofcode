@@ -5,7 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Dec9Pointers {
@@ -65,7 +67,7 @@ public class Dec9Pointers {
         Ref left;
         Ref right;
         int number;
-        List<Ref> basin = new ArrayList<>();
+        Set<Ref> basin = new HashSet<>();
 
         Ref(int number) {
             this.number = number;
