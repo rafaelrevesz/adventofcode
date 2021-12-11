@@ -8,7 +8,8 @@ import java.util.List;
 
 public class Dec11 {
     private static int flashCounter = 0;
-    private static List<List<Octopus>> octopusMatrix = new ArrayList<>();
+    private static int flashCounterOneStep = 0;
+    private static final List<List<Octopus>> octopusMatrix = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec11/dec11.txt"))) {
@@ -30,7 +31,10 @@ public class Dec11 {
                     addAdjacent(octopus, x - 1, y);
                 }
             }
-            for (int step = 0; step < 100; step++) {
+            int step = 0;
+            while (flashCounterOneStep < 100) {
+                step++;
+                flashCounterOneStep = 0;
                 for (int x = 0; x < 10; x++) {
                     for (int y = 0; y < 10; y++) {
                         octopusMatrix.get(y).get(x).increaseEnergy();
@@ -41,8 +45,12 @@ public class Dec11 {
                         octopusMatrix.get(y).get(x).cleanUp();
                     }
                 }
+                flashCounter += flashCounterOneStep;
+                if (step == 100) {
+                    System.out.println("Number of flashes after 100 step: " + flashCounter);
+                }
             }
-            System.out.println("Number of flashes: " + flashCounter);
+            System.out.println("Number of steps until synchronization: " + step);
         }
     }
 
@@ -61,7 +69,7 @@ public class Dec11 {
         void increaseEnergy() {
             energy++;
             if (energy == 10) {
-                flashCounter++;
+                flashCounterOneStep++;
                 adjacents.forEach(Octopus::increaseEnergy);
             }
         }
