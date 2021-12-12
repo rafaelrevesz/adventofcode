@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Dec12 {
 
@@ -27,23 +28,27 @@ public class Dec12 {
                 cave2.wayTo.add(cave1);
             }
         }
-        //Set<Cave> notAllowedCaves = caves.values().stream().filter(c -> !c.big && c.wayTo.isEmpty() && c != start).collect(Collectors.toSet());
-        //caves.values().forEach(c -> c.wayTo.removeAll(notAllowedCaves));
-        discover("start", start);
+        discover("start", start, null);
+        System.out.println("Path count: " + paths.size());
+        paths.clear();
+        Set<Cave> doubleVisitSmallCaves = caves.values().stream().filter(c -> !c.big && c.wayTo.size() > 1 && c != start && !c.end).collect(Collectors.toSet());
+        for (Cave smallCave : doubleVisitSmallCaves) {
+            System.out.println("DOUBLE VISIT: " + smallCave.id);
+            discover("start", start, smallCave);
+        }
         System.out.println("Path count: " + paths.size());
     }
 
-    private static void discover(String path, Cave from) {
+    private static void discover(String path, Cave from, Cave doubleVisitableCave) {
         for (Cave nextCave : from.wayTo) {
             if (nextCave.end) {
                 paths.add(path + "," + nextCave.id);
-                System.out.println(path + "," + nextCave.id);
             } else if (!nextCave.big ) {
-                if (!path.contains(nextCave.id)) {
-                    discover(path + "," + nextCave.id, nextCave);
+                if (!path.contains(nextCave.id) || (nextCave == doubleVisitableCave && path.split(nextCave.id).length < 3)) {
+                    discover(path + "," + nextCave.id, nextCave, doubleVisitableCave);
                 }
             } else {
-                discover(path + "," + nextCave.id, nextCave);
+                discover(path + "," + nextCave.id, nextCave, doubleVisitableCave);
             }
         }
     }
