@@ -3,19 +3,15 @@ package com.celadonsea.adventofcode.year2021.dec14;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Dec14 {
+    private static Map<String, Long> pairs = new HashMap<>();
+    private static final Map<Character, Long> charCounter = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
-        Map<String, String> rules = new HashMap<>();
+        Map<String, String[]> rules = new HashMap<>();
         String template = null;
         try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec14/dec14.txt"))) {
             String line;
@@ -25,47 +21,55 @@ public class Dec14 {
                 }
                 if (line.contains(" -> ")) {
                     String[] rule = line.split(" -> ");
-                    rules.put(rule[0], rule[1] + rule[0].charAt(1));
+                    String[] adjacent = new String[3];
+                    adjacent[0] = rule[0].charAt(0) + rule[1];
+                    adjacent[1] = rule[1] + rule[0].charAt(1);
+                    adjacent[2] = rule[1];
+                    rules.put(rule[0], adjacent);
                 }
             }
         }
-        for (int step = 1; step <= 10; step++) {
-            StringBuilder polimer = new StringBuilder();
-            for (int position = 0; position < template.length() - 1; position++) {
-                if (position == 0) {
-                    polimer.append(template.substring(0, 1));
-                }
-                String pair = template.substring(position, position + 2);
-                if (rules.containsKey(pair)) {
-                    polimer.append(rules.get(pair));
+        for (int i = 0; i < template.length(); i++) {
+            if (i < template.length() - 1) {
+                addPair(template.substring(i, i + 2), 1);
+            }
+            addChar(template.charAt(i), 1);
+        }
+
+        for (int step = 1; step <= 40; step++) {
+            Map<String, Long> basePairs = new HashMap<>(pairs);
+            pairs.clear();
+            for (Map.Entry<String, Long> onePair : basePairs.entrySet()) {
+                if (rules.containsKey(onePair.getKey())) {
+                    String[] rule = rules.get(onePair.getKey());
+                    addPair(rule[0], onePair.getValue());
+                    addPair(rule[1], onePair.getValue());
+                    addChar(rule[2].charAt(0), onePair.getValue());
                 } else {
-                    polimer.append(pair);
+                    addPair(onePair.getKey(), onePair.getValue());
                 }
             }
-            template = polimer.toString();
-            System.out.println("Length after step " + step + ": " + template.length());
+            long length = charCounter.values().stream().reduce(0L, Long::sum);
+            long min = charCounter.values().stream().min(Long::compareTo).get();
+            long max = charCounter.values().stream().max(Long::compareTo).get();
+            System.out.println("Length after step " + step + ": " + length);
+            System.out.println("Produce: " + (max - min));
+        }// NCNBCHB
+    }
 
-            Map<Character, Integer> an = analyze(template);
-
-            Integer min = an.values().stream().min(Integer::compareTo).get();
-            Integer max = an.values().stream().max(Integer::compareTo).get();
-            System.out.println("Min: " + min);
-            System.out.println("Max: " + max);
-            int result = max - min;
-            System.out.println("Produce: " + result);
+    private static void addPair(String pair, long number) {
+        if (pairs.containsKey(pair)) {
+            pairs.put(pair, pairs.get(pair) + number);
+        } else {
+            pairs.put(pair, number);
         }
     }
 
-    private static Map<Character, Integer> analyze(String template) {
-        Map<Character, Integer> result = new HashMap<>();
-        for (Character c : template.toCharArray()) {
-            if (result.containsKey(c)) {
-                result.put(c, result.get(c) + 1);
-            } else {
-                result.put(c, 1);
-            }
+    private static void addChar(Character c, long number) {
+        if (charCounter.containsKey(c)) {
+            charCounter.put(c, charCounter.get(c) + number);
+        } else {
+            charCounter.put(c, number);
         }
-        return result;
     }
-
 }
