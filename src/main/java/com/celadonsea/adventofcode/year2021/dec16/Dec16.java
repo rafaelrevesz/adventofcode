@@ -37,7 +37,7 @@ public class Dec16 {
 
     private String readExample() throws IOException {
         String result;
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(Dec16.class.getClassLoader().getResourceAsStream("year2021/dec16.txt")))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("year2021/dec16.txt")))) {
             result = br.readLine();
         }
         return result;

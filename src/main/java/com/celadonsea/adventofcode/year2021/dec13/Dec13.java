@@ -1,10 +1,13 @@
 package com.celadonsea.adventofcode.year2021.dec13;
 
 import com.celadonsea.adventofcode.year2021.Point;
+import com.celadonsea.adventofcode.year2021.dec14.Dec14;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +21,8 @@ public class Dec13 {
     private static Set<Point> points = new HashSet<>();
 
     public static void main(String[] args) throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader("src/com/celadonsea/adventofcode/year2021/dec13/dec13.txt"))) {
+        InputStream resourceAsStream = Dec13.class.getClassLoader().getResourceAsStream("year2021/dec13.txt");
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream))) {
             String line;
             List<Folding> foldings = new ArrayList<>();
 
@@ -38,8 +42,8 @@ public class Dec13 {
                         .collect(Collectors.toSet());
                 if (first) {
                     first = false;
-                    System.out.println("Size after first folding:" + foldedPoints.size());
                 }
+                System.out.println("Size after first folding:" + foldedPoints.size());
             }
             System.out.println("Size after all folding: " + foldedPoints.size());
             print(foldedPoints); // RLBCJGLU
@@ -81,8 +85,10 @@ public class Dec13 {
             if (direction.equals("x")) {
                 return p -> new Point(p.getX() > position ? position * 2 - p.getX() : p.getX(), p.getY());
             } else {
-                return p ->new Point(p.getX(), p.getX() > position ? position * 2 - p.getY() : p.getY());
+                return p ->new Point(p.getX(), p.getY() > position ? position * 2 - p.getY() : p.getY());
             }
         }
     }
+
+
 }

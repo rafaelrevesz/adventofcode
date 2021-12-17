@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.math.BigInteger;
 
-public class TestDec16 {
+public class Dec16Test {
 
     private Dec16 dec16 = new Dec16();
 
