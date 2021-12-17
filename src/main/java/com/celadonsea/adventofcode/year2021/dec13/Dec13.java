@@ -1,12 +1,13 @@
 package com.celadonsea.adventofcode.year2021.dec13;
 
+import com.celadonsea.adventofcode.year2021.Point;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -47,8 +48,8 @@ public class Dec13 {
     }
 
     private static void print(Set<Point> points) {
-        int maxX = points.stream().map(p -> p.x).max(Integer::compareTo).get();
-        int maxY = points.stream().map(p -> p.y).max(Integer::compareTo).get();
+        int maxX = points.stream().map(p -> p.getX()).max(Integer::compareTo).get();
+        int maxY = points.stream().map(p -> p.getY()).max(Integer::compareTo).get();
         for (int y = 0; y <= maxY; y++) {
             for (int x = 0; x <= maxX; x++) {
                 if (points.contains(new Point(x, y))) {
@@ -70,44 +71,18 @@ public class Dec13 {
         }
         Predicate<Point> filter() {
             if (direction.equals("x")) {
-                return p -> p.x != position;
+                return p -> p.getX() != position;
             } else {
-                return p -> p.y != position;
+                return p -> p.getY() != position;
             }
         }
 
         Function<Point, Point> map() {
             if (direction.equals("x")) {
-                return p -> new Point(p.x > position ? position * 2 - p.x : p.x, p.y);
+                return p -> new Point(p.getX() > position ? position * 2 - p.getX() : p.getX(), p.getY());
             } else {
-                return p ->new Point(p.x, p.y > position ? position * 2 - p.y : p.y);
+                return p ->new Point(p.getX(), p.getX() > position ? position * 2 - p.getY() : p.getY());
             }
-        }
-    }
-
-    private static class Point {
-        int x;
-        int y;
-        Point(String line) {
-            x = Integer.parseInt(line.split(",")[0]);
-            y = Integer.parseInt(line.split(",")[1]);
-        }
-        Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Point point = (Point) o;
-            return x == point.x && y == point.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
         }
     }
 }
