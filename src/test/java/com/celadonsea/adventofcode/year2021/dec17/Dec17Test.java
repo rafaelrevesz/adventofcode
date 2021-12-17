@@ -22,13 +22,13 @@ public class Dec17Test {
     @Test
     public void task2Example() {
         String input = "target area: x=20..30, y=-10..-5";
-        Assertions.assertEquals(1919, dec17.firePossibilities(input));
+        Assertions.assertEquals(112, dec17.firePossibilities(input));
     }
 
     @Test
     public void task2Puzzle() {
         String input = "target area: x=248..285, y=-85..-56";
-        Assertions.assertEquals(112, dec17.firePossibilities(input));
+        Assertions.assertEquals(1919, dec17.firePossibilities(input));
     }
 
 }
