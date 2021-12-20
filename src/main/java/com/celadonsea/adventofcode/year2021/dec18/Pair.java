@@ -11,7 +11,6 @@ public class Pair {
     private Integer leftValue;
     private Integer rightValue;
     private Direction direction;
-
     private Pair parent;
 
     public Pair(Pair left, Pair right) {
@@ -29,9 +28,6 @@ public class Pair {
         rightValue = right;
         this.parent = parent;
         level = parent.level + 1;
-        if (level > 4) {
-            System.out.println("UNHANDLED EXPLOSION: " + this.toString());
-        }
         this.direction = direction;
     }
 
@@ -98,103 +94,48 @@ public class Pair {
 
     public void increaseLevel() {
         level++;
-        if (level == 5) {
-            throw new ExplosionException(this);
-        }
         if (leftPair != null) {
-            try {
-                leftPair.increaseLevel();
-            } catch (ExplosionException e) {
-                System.out.println("EXPLOSION: " + e.getExplodedPair().toString());
-                leftPair = null; // [3,2] -> 0
-                leftValue = 0;
-                if (rightValue != null) { // [4,0] -> [7,0]
-                    addValueToRight(e.getExplodedPair().rightValue);
-                } else {
-                    Pair pair = rightPair;
-                    while (pair.leftValue == null) { // look for the right neighbour
-                        pair = pair.leftPair;
-                    }
-                    pair.addValueToLeft(e.getExplodedPair().rightValue); // add right value to the right neighbour
-                }
-                e.setRightProcessed(true);
-                Pair parentPair = this;  // [[6,[5,[4,[3,2]]]],1] becomes [[6,[5,[7,0]]],3]
-                while (parentPair != null && parentPair.direction == LEFT) { // look for the left neighbour, go to that parent where
-                    parentPair = parentPair.parent;
-                }
-                if (parentPair != null && parentPair.parent != null && parentPair.direction == RIGHT) { // there is something on the left
-                    if (parentPair.parent.leftValue != null) { // it's a number
-                        parentPair.parent.addValueToLeft(e.getExplodedPair().leftValue);
-                    } else { // it's a pair
-                        Pair pair = parentPair.parent.leftPair; // go to the left side of the parent
-                        while (pair.rightValue == null) { // look for the first right side number
-                            pair = pair.rightPair;
-                        }
-                        pair.addValueToRight(e.getExplodedPair().leftValue); // add left value to the left neighbour
-                    }
-                }
-            }
+            leftPair.increaseLevel();
         }
         if (rightPair != null) {
-            try {
-                rightPair.increaseLevel();   // [3,2] explodes
-            } catch (ExplosionException e) { // [7,[6,[5,[4,[3,2]]]]] becomes [7,[6,[5,[7,0]]]]
-                System.out.println("EXPLOSION: " + e.getExplodedPair().toString());
-                rightPair = null; // [3,2] -> 0
-                rightValue = 0;
-                if (leftValue != null) { // [4,0] -> [7,0]
-                    addValueToLeft(e.getExplodedPair().leftValue);
-                } else {
-                    Pair pair = leftPair;
-                    while (pair.rightValue == null) { // look for the left neighbour
-                        pair = pair.rightPair;
-                    }
-                    pair.addValueToRight(e.getExplodedPair().leftValue); // add left value to the left neighbour
-                }
-                e.setLeftProcessed(true);
-                Pair parentPair = this;  // [[6,[5,[4,[3,2]]]],1] becomes [[6,[5,[7,0]]],3]
-                while (parentPair != null && parentPair.direction == RIGHT) { // look for the right neighbour, go to that parent where
-                    parentPair = parentPair.parent;
-                }
-                if (parentPair != null && parentPair.parent != null && parentPair.direction == LEFT) { // there is something on the right
-                    if (parentPair.parent.rightValue != null) { // it's a number
-                        parentPair.parent.addValueToRight(e.getExplodedPair().rightValue);
-                    } else { // it's a pair
-                        Pair pair = parentPair.parent.rightPair; // go to the right side of the parent
-                        while (pair.leftValue == null) { // look for the first left side number
-                            pair = pair.leftPair;
-                        }
-                        pair.addValueToLeft(e.getExplodedPair().rightValue); // add right value to the right neighbour
-                    }
-                }
-            }
-        }
-    }
-
-    private void addValueToLeft(int value) {
-        if (leftValue + value < 10) {
-            leftValue += value;
-        } else {
-            int sum = leftValue + value;
-            leftValue = null;
-            leftPair = new Pair(sum / 2, sum - sum / 2, this, LEFT);
-            System.out.println("SPLIT: " + sum + "->" + leftPair.toString());
-        }
-    }
-
-    private void addValueToRight(int value) {
-        if (rightValue + value < 10) {
-            rightValue += value;
-        } else {
-            int sum = rightValue + value;
-            rightValue = null;
-            rightPair = new Pair(sum / 2, sum - sum / 2, this, RIGHT);
-            System.out.println("SPLIT: " + sum + "->" + rightPair.toString());
+            rightPair.increaseLevel();
         }
     }
 
     public void setParent(Pair parent) {
         this.parent = parent;
+    }
+
+    public Pair getParent() {
+        return parent;
+    }
+
+    public void setRightPair(Pair rightPair) {
+        this.rightPair = rightPair;
+    }
+
+    public void setLeftPair(Pair leftPair) {
+        this.leftPair = leftPair;
+    }
+
+    public void setLeftValue(Integer leftValue) {
+        this.leftValue = leftValue;
+    }
+
+    public void setRightValue(Integer rightValue) {
+        this.rightValue = rightValue;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void addValueToLeft(int value) {
+        this.leftValue += value;
+    }
+
+    public void addValueToRight(int value) {
+        this.rightValue += value;
     }
 
     @Override

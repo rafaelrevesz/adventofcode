@@ -18,6 +18,7 @@ public class Dec16Test {
     @Test
     public void puzzleTask2() throws IOException {
         Assertions.assertEquals(BigInteger.valueOf(342997120375L), dec16.getValue());
+        //                                         342656732622
     }
 
     @Test
